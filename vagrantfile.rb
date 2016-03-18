@@ -2,7 +2,7 @@ require 'yaml'
 
 dir = File.dirname(__FILE__) + '/../'
 # local variables
-settings = YAML.load_file dir + 'conf/vagrant_local.yml'
+settings = YAML.load_file dir + 'conf/setup.yml'
 
 INSTANCE_NAME     = settings['name']
 INSTANCE_HOSTNAME = settings['hostname']
@@ -17,7 +17,7 @@ FileUtils.mkdir_p dir + ANSIBLE_INVENTORY
 File.open(dir + ANSIBLE_INVENTORY + "/hosts", 'w') { |file| file.write("[vagrant]\n" + INSTANCE_IP) }
 # Link the ansible playbook
 unless File.exist?(dir + "ansible/playbook/vagrant.yml")
-	FileUtils.ln_s "../../conf/vagrant.yml", dir + "ansible/playbook/vagrant.yml"
+	FileUtils.ln_s "../../conf/setup.yml", dir + "ansible/playbook/vagrant.yml"
 end
 
 # Support project-specific ansible roles
@@ -115,7 +115,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	config.vm.provision "ansible" do |ansible|
 		#ansible.verbose        = "v"
 		ansible.inventory_path = ANSIBLE_INVENTORY
-		ansible.extra_vars     = dir + "conf/variables.yml"
+		ansible.extra_vars     = dir + "conf/setup.yml"
 		ansible.playbook       = dir + "ansible/playbook/vagrant.yml"
 		ansible.limit          = "all"
 	end
