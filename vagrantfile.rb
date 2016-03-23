@@ -47,17 +47,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 #	config.ssh.private_key_path = "~/.vagrant.d/insecure_private_key"
 
 	# Sync folders
-	config.vm.synced_folder ".", "/vagrant", type: :nfs
-
-	# Vagrant cachier
-	if Vagrant.has_plugin?("vagrant-cachier")
-		config.cache.scope = :box
-		config.cache.enable :yum
-		config.cache.synced_folder_opts = {
-			type: :nfs,
-			mount_options: ['rw', 'vers=3', 'tcp', 'nolock', 'actimeo=1']
-		}
-	end
+	#config.vm.synced_folder ".", "/vagrant", type: :nfs
+	config.vm.synced_folder ".", "/vagrant", type: :nfs, disabled: true
+	config.unison.host_folder = "drupal/"  #relative to the folder your Vagrantfile is in
+	config.unison.guest_folder = "/vagrant/drupal" #relative to the vagrant home folder -> /home/vagrant
+	config.unison.ignore = "Name {.DS_Store,.git,.idea,node_modules}" # Default: none
+	config.unison.ssh_host = "33.33.33.168"
+	config.unison.ssh_port = 22 # Default: 2222
+	config.unison.perms = 0
 
 	########################################
 	# Configuration for virtualbox

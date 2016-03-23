@@ -1,0 +1,5 @@
+---
+# file: roles/unison/tasks/main.yml
+
+  - name: Unison | Install modules required for Unison
+    yum: pkg=unison240 state=latest
